@@ -1,0 +1,20 @@
+[package]
+name = "acp-ffi"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "ACP C FFI bindings"
+
+[lib]
+crate-type = ["cdylib", "staticlib"]
+
+[dependencies]
+acp-core = { path = "../acp-core" }
+libc.workspace = true
+
+[build-dependencies]
+cbindgen = "0.26"

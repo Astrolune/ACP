@@ -1,0 +1,120 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+
+  build-native:
+    name: Build Native Libraries
+    needs: create-release
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            artifact: libacp.so
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            artifact: acp.dll
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            artifact: libacp.dylib
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            artifact: libacp.dylib
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: ${{ matrix.target }}
+
+    - name: Build
+      run: cargo build --release --target ${{ matrix.target }} -p acp-ffi
+
+    - name: Upload artifact
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: ./target/${{ matrix.target }}/release/${{ matrix.artifact }}
+        asset_name: ${{ matrix.artifact }}-${{ matrix.target }}
+        asset_content_type: application/octet-stream
+
+  publish-crates:
+    name: Publish to crates.io
+    needs: build-native
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+
+    - name: Publish acp-core
+      run: cargo publish -p acp-core --token ${{ secrets.CARGO_TOKEN }}
+
+    - name: Wait for crates.io
+      run: sleep 30
+
+    - name: Publish acp-ffi
+      run: cargo publish -p acp-ffi --token ${{ secrets.CARGO_TOKEN }}
+
+  publish-nuget:
+    name: Publish to NuGet
+    needs: build-native
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Build Rust library
+      run: cargo build --release -p acp-ffi
+
+    - name: Pack NuGet
+      run: dotnet pack crates/acp-csharp/dotnet/ACP.csproj -c Release
+
+    - name: Push to NuGet
+      run: dotnet nuget push crates/acp-csharp/dotnet/bin/Release/*.nupkg --api-key ${{ secrets.NUGET_TOKEN }} --source https://api.nuget.org/v3/index.json

@@ -1,0 +1,50 @@
+# Build artifacts
+/target/
+**/target/
+
+# Cargo lock for libraries (keep for applications)
+# Cargo.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Generated files
+crates/acp-ffi/include/acp.h
+
+# Fuzz corpus
+tests/fuzz/corpus/
+tests/fuzz/artifacts/
+
+# CMake
+**/build/
+**/cmake-build-*/
+
+# .NET
+**/bin/
+**/obj/
+*.user
+
+# Test outputs
+*.profraw
+*.profdata
+
+# Shaitan
+CHECKLIST.md
+COMPLETE.md
+FINAL_REPORT.md
+GETTING_STARTED.md
+PROJECT_SUMMARY.md
+QUICKSTART.md
+STATUS.md
+STRUCTURE.md
+SUMMARY.md
+TODO.md
+ARCHITECTURE.md

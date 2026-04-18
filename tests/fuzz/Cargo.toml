@@ -1,0 +1,25 @@
+[package]
+name = "acp-fuzz"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+acp-core = { path = "../../crates/acp-core" }
+libfuzzer-sys = "0.4"
+
+[[bin]]
+name = "fuzz_cipher"
+path = "fuzz_targets/fuzz_cipher.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "fuzz_key"
+path = "fuzz_targets/fuzz_key.rs"
+test = false
+doc = false
+
+[profile.release]
+opt-level = 3
+lto = true

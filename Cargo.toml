@@ -1,0 +1,50 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/acp-core",
+    "crates/acp-ffi",
+    "crates/acp-csharp",
+    "crates/acp-cpp",
+    "tests/fuzz",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75"
+authors = ["Astrolune Team"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/Astrolune/ACP"
+homepage = "https://github.com/Astrolune/ACP"
+keywords = ["cryptography", "encryption", "security", "ffi"]
+categories = ["cryptography", "api-bindings"]
+
+[workspace.dependencies]
+# Core crypto dependencies
+aes-gcm = "0.10"
+chacha20poly1305 = "0.10"
+hkdf = "0.12"
+argon2 = "0.5"
+zeroize = { version = "1.7", features = ["derive"] }
+
+# Error handling
+thiserror = "1.0"
+
+# FFI
+libc = "0.2"
+
+# Testing
+proptest = "1.4"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
+
+[profile.bench]
+inherits = "release"
+
+[profile.dev]
+opt-level = 0
+debug = true

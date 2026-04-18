@@ -1,0 +1,21 @@
+[package]
+name = "acp-examples"
+version.workspace = true
+edition.workspace = true
+publish = false
+
+[[example]]
+name = "basic_encryption"
+path = "rust/basic_encryption.rs"
+
+[[example]]
+name = "key_derivation"
+path = "rust/key_derivation.rs"
+
+[[example]]
+name = "session_management"
+path = "rust/session_management.rs"
+
+[dependencies]
+acp-core = { path = "../crates/acp-core" }
+hex = "0.4"

@@ -1,0 +1,34 @@
+[package]
+name = "acp-core"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description = "ACP (Astrolune Cipher Protocol) - Core cryptographic library"
+
+[dependencies]
+aes-gcm.workspace = true
+chacha20poly1305.workspace = true
+hkdf.workspace = true
+argon2.workspace = true
+zeroize.workspace = true
+thiserror.workspace = true
+
+# Optional AVM integration (uncomment when AVM submodule is added)
+# avm-sys = { path = "../../AVM", optional = true }
+
+[dev-dependencies]
+proptest.workspace = true
+hex = "0.4"
+sha2 = "0.10"
+
+[features]
+default = ["std"]
+std = []
+alloc = []
+# avm = ["avm-sys"]  # Uncomment when AVM submodule is added
