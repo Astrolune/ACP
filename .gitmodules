@@ -1,4 +1,4 @@
 [submodule "AVM"]
 	path = AVM
-	url = https://github.com/Astrolune/AVM
+	url = https://github.com/Astrolune/AVM.git
 	branch = main
