@@ -154,8 +154,6 @@ ACP follows security best practices:
 - Regular security audits with `cargo-audit`
 - Fuzz testing for robustness
 
-**Reporting vulnerabilities**: Please email security@astrolune.dev
-
 ## AVM Integration
 
 ACP supports optional integration with [AVM](https://github.com/Astrolune/AVM) via git submodule:
