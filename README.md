@@ -2,8 +2,6 @@
 
 [![CI](https://github.com/Astrolune/ACP/workflows/CI/badge.svg)](https://github.com/Astrolune/ACP/actions)
 [![Security Audit](https://github.com/Astrolune/ACP/workflows/Security%20Audit/badge.svg)](https://github.com/Astrolune/ACP/actions)
-[![Crates.io](https://img.shields.io/crates/v/acp-core.svg)](https://crates.io/crates/acp-core)
-[![Documentation](https://docs.rs/acp-core/badge.svg)](https://docs.rs/acp-core)
 [![License](https://img.shields.io/badge/Apache--2.0-blue.svg)](LICENSE)
 
 A secure, transport-agnostic cryptographic library with multi-language support.
